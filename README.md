@@ -1,4 +1,4 @@
-This is a minimal version of [`Vercel AI Chatbot`](https://github.com/vercel/ai-chatbot) updated to Next 13.5 and using shadcn-ui.
+This is a minimal version of [`Vercel AI Chatbot`](https://github.com/vercel/ai-chatbot) updated to Next 13.5.
 
 - removed database, auth, chat history
 
