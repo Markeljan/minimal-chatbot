@@ -1,4 +1,7 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a minimal version of [`create-next-app`](https://github.com/vercel/ai-chatbot) updated to Next 13.5 and using shadcn-ui.
+
+- removed database, auth, chat history
+
 
 ## Getting Started
 
