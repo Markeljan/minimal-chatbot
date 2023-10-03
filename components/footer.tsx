@@ -10,7 +10,7 @@ export function FooterText({ className, ...props }: React.ComponentProps<'p'>) {
             )}
             {...props}
         >
-            Created by{' '}
+            by{' '}
             <ExternalLink href="https://github.com/markeljan/minimal-chatbot">Markeljan</ExternalLink>{' '}
             based on{' '}
             <ExternalLink href="https://github.com/vercel-labs/ai-chatbot">Vercel AI Chatbot</ExternalLink>
