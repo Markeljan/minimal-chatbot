@@ -1,49 +1,59 @@
-'use client'
+'use client';
 
-import { useChat, type Message } from 'ai/react'
-import { toast } from 'react-hot-toast'
+import { useChat } from 'ai/react';
 
-import { cn } from '@/lib/utils'
-import { ChatList } from '@/components/chat-list'
-import { ChatPanel } from '@/components/chat-panel'
-import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
+import { ChatHeader } from '@/components/chat-header';
+import { Messages } from './messages';
+import { MultimodalInput } from './multimodal-input';
 
+export function Chat({
+  id,
+  selectedModelId,
+}: {
+  id: string;
+  selectedModelId: string;
+}) {
+  const {
+    messages,
+    setMessages,
+    handleSubmit,
+    input,
+    setInput,
+    append,
+    isLoading,
+    stop,
+    reload,
+  } = useChat({
+    id,
+    body: { id, modelId: selectedModelId },
+    experimental_throttle: 100,
+  });
 
-export interface ChatProps extends React.ComponentProps<'div'> {
-    initialMessages?: Message[]
-}
+  return (
+    <div className="flex flex-col min-w-0 h-dvh bg-background">
+      <ChatHeader selectedModelId={selectedModelId} />
 
-export function Chat({ initialMessages, className }: ChatProps) {
-    const { messages, append, reload, stop, isLoading, input, setInput } =
-        useChat({
-            initialMessages,
-            onResponse(response) {
-                if (response.status === 401) {
-                    toast.error(response.statusText)
-                }
-            }
-        })
-        
-    return (
-        <>
-            <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
-                {messages.length ? (
-                    <>
-                        <ChatList messages={messages} />
-                        <ChatScrollAnchor trackVisibility={isLoading} />
-                    </>
-                ) : <></>
-                }
-            </div>
-            <ChatPanel
-                isLoading={isLoading}
-                stop={stop}
-                append={append}
-                reload={reload}
-                messages={messages}
-                input={input}
-                setInput={setInput}
-            />
-        </>
-    )
+      <Messages
+        chatId={id}
+        isLoading={isLoading}
+        messages={messages}
+        setMessages={setMessages}
+        reload={reload}
+      />
+
+      <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
+        <MultimodalInput
+          chatId={id}
+          input={input}
+          setInput={setInput}
+          handleSubmit={handleSubmit}
+          isLoading={isLoading}
+          stop={stop}
+          messages={messages}
+          setMessages={setMessages}
+          append={append}
+        />
+      </form>
+    </div>
+  );
 }

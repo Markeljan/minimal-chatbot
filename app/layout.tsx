@@ -1,77 +1,71 @@
-import { Metadata } from "next";
+import type { Metadata } from 'next';
+import { Toaster } from 'sonner';
 
-import { Toaster } from "react-hot-toast";
-import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from '@/components/theme-provider';
 
-import "@/app/globals.css";
-import { fontMono, fontSans } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
-import { Providers } from "@/components/providers";
-import { Header } from "@/components/header";
-
-const APP_URL = new URL(process.env.NEXT_PUBLIC_APP_URL || "https://chat.vercel.ai");
+import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: APP_URL,
-  title: "AI Chatbot",
-  description: "AI Chatbot built with Next.js, Vercel AI, shadcn.",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
-  },
-  openGraph: {
-    title: "AI Chatbot",
-    description: "AI Chatbot built with Next.js, Vercel AI, shadcn.",
-    url: APP_URL,
-    siteName: "AI Chatbot",
-    images: [
-      {
-        url: APP_URL + "/opengraph-image.png",
-        alt: "AI Chatbot",
-        width: 1686,
-        height: 882,
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    title: "AI Chatbot",
-    description: "AI Chatbot built with Next.js, Vercel AI, shadcn.",
-    site: APP_URL.toString(),
-    images: [
-      {
-        url: APP_URL + "/twitter-image.png",
-        alt: "AI Chatbot",
-        width: 1686,
-        height: 882,
-      },
-    ],
-  },
+  metadataBase: new URL('https://chat.vercel.ai'),
+  title: 'Next.js Chatbot Template',
+  description: 'Next.js chatbot template using the AI SDK.',
 };
 
-interface RootLayoutProps {
-  children: React.ReactNode;
-}
+export const viewport = {
+  maximumScale: 1, // Disable auto-zoom on mobile Safari
+};
 
-export default function RootLayout({ children }: RootLayoutProps) {
+const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)';
+const DARK_THEME_COLOR = 'hsl(240deg 10% 3.92%)';
+const THEME_COLOR_SCRIPT = `\
+(function() {
+  var html = document.documentElement;
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute('name', 'theme-color');
+    document.head.appendChild(meta);
+  }
+  function updateThemeColor() {
+    var isDark = html.classList.contains('dark');
+    meta.setAttribute('content', isDark ? '${DARK_THEME_COLOR}' : '${LIGHT_THEME_COLOR}');
+  }
+  var observer = new MutationObserver(updateThemeColor);
+  observer.observe(html, { attributes: true, attributeFilter: ['class'] });
+  updateThemeColor();
+})();`;
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head />
-      <body className={cn("font-sans antialiased", fontSans.variable, fontMono.variable)}>
-        <Analytics />
-        <Toaster />
-        <Providers attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
-          </div>
-        </Providers>
+    <html
+      lang="en"
+      // `next-themes` injects an extra classname to the body element to avoid
+      // visual flicker before hydration. Hence the `suppressHydrationWarning`
+      // prop is necessary to avoid the React hydration mismatch warning.
+      // https://github.com/pacocoursey/next-themes?tab=readme-ov-file#with-app
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: THEME_COLOR_SCRIPT,
+          }}
+        />
+      </head>
+      <body className="antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Toaster position="top-center" />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
