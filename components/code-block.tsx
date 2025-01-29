@@ -6,12 +6,13 @@ import type { ExtraProps } from 'react-markdown';
 import { cn } from '@/lib/utils';
 
 type CodeBlockProps<T extends boolean> = {
-  children: ReactNode
-  className?: string
-  inline?: T
-} & ExtraProps & (T extends true
-  ? HTMLAttributes<HTMLElement>
-  : HTMLAttributes<HTMLPreElement>)
+  children: ReactNode;
+  className?: string;
+  inline?: T;
+} & ExtraProps &
+  (T extends true
+    ? HTMLAttributes<HTMLElement>
+    : HTMLAttributes<HTMLPreElement>);
 
 export function CodeBlock<T extends boolean>({
   node,
@@ -35,9 +36,7 @@ export function CodeBlock<T extends boolean>({
         {children}
       </code>
     );
-
   } else {
-
     return (
       <div className="not-prose flex flex-col">
         {tab === 'code' && (

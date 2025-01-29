@@ -4,9 +4,12 @@ import { Block } from '@/components/create-block';
 import { CopyIcon } from '@/components/icons';
 import { ImageEditor } from '@/components/image-editor';
 
-export const imageBlock: Block<'image', {
-  content: string;
-}> = new Block({
+export const imageBlock: Block<
+  'image',
+  {
+    content: string;
+  }
+> = new Block({
   kind: 'image',
   description: 'Useful for image generation',
   initialize: ({ setMetadata }) => {

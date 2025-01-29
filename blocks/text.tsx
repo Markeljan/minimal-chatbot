@@ -5,9 +5,12 @@ import { DocumentSkeleton } from '@/components/document-skeleton';
 import { Editor } from '@/components/editor';
 import { CopyIcon, MessageIcon, PenIcon } from '@/components/icons';
 
-export const textBlock: Block<'text', {
-  suggestions: string[];
-}> = new Block({
+export const textBlock: Block<
+  'text',
+  {
+    suggestions: string[];
+  }
+> = new Block({
   kind: 'text',
   description: 'Useful for text content, like drafting essays and emails.',
   initialize: async ({ setMetadata }) => {
@@ -20,11 +23,11 @@ export const textBlock: Block<'text', {
       setBlock((draftBlock) => {
         return {
           ...draftBlock,
-          content: draftBlock.content + (streamPart.content),
+          content: draftBlock.content + streamPart.content,
           isVisible:
             draftBlock.status === 'streaming' &&
-              draftBlock.content.length > 400 &&
-              draftBlock.content.length < 450
+            draftBlock.content.length > 400 &&
+            draftBlock.content.length < 450
               ? true
               : draftBlock.isVisible,
           status: 'streaming',

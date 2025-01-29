@@ -9,7 +9,7 @@ import {
   Sidebar,
   SidebarHeader,
   SidebarMenu,
-  useSidebar
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 

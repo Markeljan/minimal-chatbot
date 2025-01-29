@@ -8,15 +8,15 @@ import { BlockKind, blockDefinitions } from './block';
 
 export type DataStreamDelta = {
   type:
-  | 'text-delta'
-  | 'code-delta'
-  | 'image-delta'
-  | 'title'
-  | 'id'
-  | 'clear'
-  | 'finish'
-  | 'user-message-id'
-  | 'kind';
+    | 'text-delta'
+    | 'code-delta'
+    | 'image-delta'
+    | 'title'
+    | 'id'
+    | 'clear'
+    | 'finish'
+    | 'user-message-id'
+    | 'kind';
   content: string;
 };
 

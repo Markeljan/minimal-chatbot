@@ -7,12 +7,7 @@ import {
   ConsoleOutputContent,
 } from '@/components/console';
 import { Block } from '@/components/create-block';
-import {
-  CopyIcon,
-  LogsIcon,
-  MessageIcon,
-  PlayIcon,
-} from '@/components/icons';
+import { CopyIcon, LogsIcon, MessageIcon, PlayIcon } from '@/components/icons';
 import { generateUUID } from '@/lib/utils';
 
 const OUTPUT_HANDLERS = {
@@ -61,10 +56,12 @@ function detectRequiredHandlers(code: string): string[] {
   return handlers;
 }
 
-
-export const codeBlock: Block<'code', {
-  outputs: Array<ConsoleOutput>;
-}> = new Block({
+export const codeBlock: Block<
+  'code',
+  {
+    outputs: Array<ConsoleOutput>;
+  }
+> = new Block({
   kind: 'code',
   description:
     'Useful for code generation; Code execution is only available for python code.',
@@ -80,8 +77,8 @@ export const codeBlock: Block<'code', {
         content: streamPart.content,
         isVisible:
           draftBlock.status === 'streaming' &&
-            draftBlock.content.length > 300 &&
-            draftBlock.content.length < 310
+          draftBlock.content.length > 300 &&
+          draftBlock.content.length < 310
             ? true
             : draftBlock.isVisible,
         status: 'streaming',
@@ -118,19 +115,21 @@ export const codeBlock: Block<'code', {
         const runId = generateUUID();
         const outputContent: Array<ConsoleOutputContent> = [];
 
-        setMetadata((metadata: {
-          outputs: Array<ConsoleOutput>;
-        }) => ({
-          ...metadata,
-          outputs: [
-            ...metadata.outputs,
-            {
-              id: runId,
-              contents: [],
-              status: 'in_progress',
-            },
-          ],
-        }));
+        setMetadata(
+          (metadata: {
+            outputs: Array<ConsoleOutput>;
+          }) => ({
+            ...metadata,
+            outputs: [
+              ...metadata.outputs,
+              {
+                id: runId,
+                contents: [],
+                status: 'in_progress',
+              },
+            ],
+          }),
+        );
 
         try {
           // @ts-expect-error - loadPyodide is not defined
@@ -151,19 +150,21 @@ export const codeBlock: Block<'code', {
 
           await currentPyodideInstance.loadPackagesFromImports(content, {
             messageCallback: (message: string) => {
-              setMetadata((metadata: {
-                outputs: Array<ConsoleOutput>;
-              }) => ({
-                ...metadata,
-                outputs: [
-                  ...metadata.outputs.filter((output) => output.id !== runId),
-                  {
-                    id: runId,
-                    contents: [{ type: 'text', value: message }],
-                    status: 'loading_packages',
-                  },
-                ],
-              }));
+              setMetadata(
+                (metadata: {
+                  outputs: Array<ConsoleOutput>;
+                }) => ({
+                  ...metadata,
+                  outputs: [
+                    ...metadata.outputs.filter((output) => output.id !== runId),
+                    {
+                      id: runId,
+                      contents: [{ type: 'text', value: message }],
+                      status: 'loading_packages',
+                    },
+                  ],
+                }),
+              );
             },
           });
 
@@ -184,33 +185,43 @@ export const codeBlock: Block<'code', {
 
           await currentPyodideInstance.runPythonAsync(content);
 
-          setMetadata((metadata: {
-            outputs: Array<ConsoleOutput>;
-          }) => ({
-            ...metadata,
-            outputs: [
-              ...metadata.outputs.filter((output) => output.id !== runId),
-              {
-                id: runId,
-                contents: outputContent,
-                status: 'completed',
-              },
-            ],
-          }));
+          setMetadata(
+            (metadata: {
+              outputs: Array<ConsoleOutput>;
+            }) => ({
+              ...metadata,
+              outputs: [
+                ...metadata.outputs.filter((output) => output.id !== runId),
+                {
+                  id: runId,
+                  contents: outputContent,
+                  status: 'completed',
+                },
+              ],
+            }),
+          );
         } catch (error) {
-          setMetadata((metadata: {
-            outputs: Array<ConsoleOutput>;
-          }) => ({
-            ...metadata,
-            outputs: [
-              ...metadata.outputs.filter((output) => output.id !== runId),
-              {
-                id: runId,
-                contents: [{ type: 'text', value: error instanceof Error ? error.message : String(error) }],
-                status: 'failed',
-              },
-            ],
-          }));
+          setMetadata(
+            (metadata: {
+              outputs: Array<ConsoleOutput>;
+            }) => ({
+              ...metadata,
+              outputs: [
+                ...metadata.outputs.filter((output) => output.id !== runId),
+                {
+                  id: runId,
+                  contents: [
+                    {
+                      type: 'text',
+                      value:
+                        error instanceof Error ? error.message : String(error),
+                    },
+                  ],
+                  status: 'failed',
+                },
+              ],
+            }),
+          );
         }
       },
     },

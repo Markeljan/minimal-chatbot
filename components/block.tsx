@@ -1,8 +1,4 @@
-import type {
-  ChatRequestOptions,
-  CreateMessage,
-  Message,
-} from 'ai';
+import type { ChatRequestOptions, CreateMessage, Message } from 'ai';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   type Dispatch,
@@ -26,11 +22,10 @@ import { BlockMessages } from '@/components/block-messages';
 import { BlockCloseButton } from '@/components/block-close-button';
 import { BlockActions } from '@/components/block-actions';
 
-export const blockDefinitions = [textBlock, codeBlock, imageBlock] as const
+export const blockDefinitions = [textBlock, codeBlock, imageBlock] as const;
 
 export type BlockKind = (typeof blockDefinitions)[number]['kind'];
-export type BlockDefinition = typeof blockDefinitions[number]
-
+export type BlockDefinition = (typeof blockDefinitions)[number];
 
 export interface UIBlock {
   title: string;
@@ -172,7 +167,7 @@ function PureBlock({
       if (blockDefinition.initialize) {
         blockDefinition.initialize({
           documentId: block.documentId,
-          setMetadata
+          setMetadata,
         });
       }
     }
@@ -257,56 +252,56 @@ function PureBlock({
             initial={
               isMobile
                 ? {
-                  opacity: 1,
-                  x: block.boundingBox.left,
-                  y: block.boundingBox.top,
-                  height: block.boundingBox.height,
-                  width: block.boundingBox.width,
-                  borderRadius: 50,
-                }
+                    opacity: 1,
+                    x: block.boundingBox.left,
+                    y: block.boundingBox.top,
+                    height: block.boundingBox.height,
+                    width: block.boundingBox.width,
+                    borderRadius: 50,
+                  }
                 : {
-                  opacity: 1,
-                  x: block.boundingBox.left,
-                  y: block.boundingBox.top,
-                  height: block.boundingBox.height,
-                  width: block.boundingBox.width,
-                  borderRadius: 50,
-                }
+                    opacity: 1,
+                    x: block.boundingBox.left,
+                    y: block.boundingBox.top,
+                    height: block.boundingBox.height,
+                    width: block.boundingBox.width,
+                    borderRadius: 50,
+                  }
             }
             animate={
               isMobile
                 ? {
-                  opacity: 1,
-                  x: 0,
-                  y: 0,
-                  height: windowHeight,
-                  width: windowWidth ? windowWidth : 'calc(100dvw)',
-                  borderRadius: 0,
-                  transition: {
-                    delay: 0,
-                    type: 'spring',
-                    stiffness: 200,
-                    damping: 30,
-                    duration: 5000,
-                  },
-                }
+                    opacity: 1,
+                    x: 0,
+                    y: 0,
+                    height: windowHeight,
+                    width: windowWidth ? windowWidth : 'calc(100dvw)',
+                    borderRadius: 0,
+                    transition: {
+                      delay: 0,
+                      type: 'spring',
+                      stiffness: 200,
+                      damping: 30,
+                      duration: 5000,
+                    },
+                  }
                 : {
-                  opacity: 1,
-                  x: 400,
-                  y: 0,
-                  height: windowHeight,
-                  width: windowWidth
-                    ? windowWidth - 400
-                    : 'calc(100dvw-400px)',
-                  borderRadius: 0,
-                  transition: {
-                    delay: 0,
-                    type: 'spring',
-                    stiffness: 200,
-                    damping: 30,
-                    duration: 5000,
-                  },
-                }
+                    opacity: 1,
+                    x: 400,
+                    y: 0,
+                    height: windowHeight,
+                    width: windowWidth
+                      ? windowWidth - 400
+                      : 'calc(100dvw-400px)',
+                    borderRadius: 0,
+                    transition: {
+                      delay: 0,
+                      type: 'spring',
+                      stiffness: 200,
+                      damping: 30,
+                      duration: 5000,
+                    },
+                  }
             }
             exit={{
               opacity: 0,

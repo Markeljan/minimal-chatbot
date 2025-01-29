@@ -6,9 +6,9 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint && biome lint --write --unsafe",
-    "lint:fix": "next lint --fix && biome lint --write --unsafe",
-    "format": "biome format --write"
+    "lint": "biome lint --write --unsafe --diagnostic-level=error",
+    "lint:fix": "biome lint --write --unsafe --diagnostic-level=error",
+    "format": "biome format --write --diagnostic-level=error"
   },
   "dependencies": {
     "@ai-sdk/openai": "1.1.5",

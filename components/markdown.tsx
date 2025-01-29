@@ -4,7 +4,6 @@ import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { CodeBlock } from './code-block';
 
-
 const components: Components = {
   code: ({ node, className, children, ...props }) => {
     return (

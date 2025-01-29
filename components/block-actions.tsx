@@ -32,49 +32,50 @@ function PureBlockActions({ block, metadata, setMetadata }: BlockActionsProps) {
 
   return (
     <div className="flex flex-row gap-1">
-      {blockDefinition.actions.map(
-        (action) => (
-          <Tooltip key={action.description}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn('h-fit dark:hover:bg-zinc-700', {
-                  'p-2': !action.label,
-                  'py-1.5 px-2': action.label,
-                })}
-                onClick={async () => {
-                  setIsLoading(true);
-                  try {
-                    await Promise.resolve(action.onClick(actionContext));
-                  } catch (error) {
-                    toast.error('Failed to execute action');
-                  } finally {
-                    setIsLoading(false);
-                  }
-                }}
-                disabled={
-                  isLoading || block.status === 'streaming'
-                    ? true
-                    : action.isDisabled
-                      ? action.isDisabled(actionContext)
-                      : false
+      {blockDefinition.actions.map((action) => (
+        <Tooltip key={action.description}>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn('h-fit dark:hover:bg-zinc-700', {
+                'p-2': !action.label,
+                'py-1.5 px-2': action.label,
+              })}
+              onClick={async () => {
+                setIsLoading(true);
+                try {
+                  await Promise.resolve(action.onClick(actionContext));
+                } catch (error) {
+                  toast.error('Failed to execute action');
+                } finally {
+                  setIsLoading(false);
                 }
-              >
-                {action.icon}
-                {action.label}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{action.description}</TooltipContent>
-          </Tooltip>
-        ),
-      )}
+              }}
+              disabled={
+                isLoading || block.status === 'streaming'
+                  ? true
+                  : action.isDisabled
+                    ? action.isDisabled(actionContext)
+                    : false
+              }
+            >
+              {action.icon}
+              {action.label}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{action.description}</TooltipContent>
+        </Tooltip>
+      ))}
     </div>
   );
 }
 
-export const BlockActions = memo(PureBlockActions, (prevProps: BlockActionsProps, nextProps: BlockActionsProps) => {
-  if (prevProps.block.status !== nextProps.block.status) return false;
-  if (prevProps.metadata !== nextProps.metadata) return false;
+export const BlockActions = memo(
+  PureBlockActions,
+  (prevProps: BlockActionsProps, nextProps: BlockActionsProps) => {
+    if (prevProps.block.status !== nextProps.block.status) return false;
+    if (prevProps.metadata !== nextProps.metadata) return false;
 
-  return true;
-}) as (props: BlockActionsProps) => JSX.Element;
+    return true;
+  },
+) as (props: BlockActionsProps) => JSX.Element;
